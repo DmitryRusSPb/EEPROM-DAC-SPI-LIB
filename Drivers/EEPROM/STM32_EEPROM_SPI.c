@@ -93,6 +93,7 @@ EepromOperations EEPROM_SPI_WritePage(uint8_t* pBuffer, uint16_t WriteAddr, uint
  * @param  NumByteToWrite: number of bytes to write to the EEPROM.
  * @retval EepromOperations value: EEPROM_STATUS_COMPLETE or EEPROM_STATUS_ERROR
  */
+
 EepromOperations EEPROM_SPI_WriteBuffer(uint8_t* pBuffer, uint16_t WriteAddr, uint16_t NumByteToWrite)
 {
 	uint16_t NumOfPage = 0, NumOfSingle = 0, Addr = 0, count = 0, temp = 0;
@@ -106,8 +107,7 @@ EepromOperations EEPROM_SPI_WriteBuffer(uint8_t* pBuffer, uint16_t WriteAddr, ui
 	NumOfSingle = NumByteToWrite % EEPROM_PAGESIZE;
 
 	if (Addr == 0) { /* WriteAddr is EEPROM_PAGESIZE aligned  */
-		if (NumOfPage == 0)
-		{ /* NumByteToWrite < EEPROM_PAGESIZE */
+		if (NumOfPage == 0) { /* NumByteToWrite < EEPROM_PAGESIZE */
 			sEE_DataNum = NumByteToWrite;
 			pageWriteStatus = EEPROM_SPI_WritePage(pBuffer, WriteAddr, sEE_DataNum);
 
@@ -115,8 +115,7 @@ EepromOperations EEPROM_SPI_WriteBuffer(uint8_t* pBuffer, uint16_t WriteAddr, ui
 				return pageWriteStatus;
 			}
 
-		} else
-		{ /* NumByteToWrite > EEPROM_PAGESIZE */
+		} else { /* NumByteToWrite > EEPROM_PAGESIZE */
 			while (NumOfPage--) {
 				sEE_DataNum = EEPROM_PAGESIZE;
 				pageWriteStatus = EEPROM_SPI_WritePage(pBuffer, WriteAddr, sEE_DataNum);
@@ -136,8 +135,7 @@ EepromOperations EEPROM_SPI_WriteBuffer(uint8_t* pBuffer, uint16_t WriteAddr, ui
 				return pageWriteStatus;
 			}
 		}
-	} else
-	{ /* WriteAddr is not EEPROM_PAGESIZE aligned  */
+	} else { /* WriteAddr is not EEPROM_PAGESIZE aligned  */
 		if (NumOfPage == 0) { /* NumByteToWrite < EEPROM_PAGESIZE */
 			if (NumOfSingle > count) { /* (NumByteToWrite + WriteAddr) > EEPROM_PAGESIZE */
 				temp = NumOfSingle - count;
@@ -161,8 +159,7 @@ EepromOperations EEPROM_SPI_WriteBuffer(uint8_t* pBuffer, uint16_t WriteAddr, ui
 			if (pageWriteStatus != EEPROM_STATUS_COMPLETE) {
 				return pageWriteStatus;
 			}
-		} else
-		{ /* NumByteToWrite > EEPROM_PAGESIZE */
+		} else { /* NumByteToWrite > EEPROM_PAGESIZE */
 			NumByteToWrite -= count;
 			NumOfPage =  NumByteToWrite / EEPROM_PAGESIZE;
 			NumOfSingle = NumByteToWrite % EEPROM_PAGESIZE;
